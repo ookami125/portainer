@@ -173,7 +173,8 @@ func dockerSnapshotContainers(snapshot *portainer.DockerSnapshot, cli *client.Cl
 		var gpuOptions *_container.DeviceRequest
 
 		for _, deviceRequest := range response.HostConfig.Resources.DeviceRequests {
-			if deviceRequest.Driver == "nvidia" || deviceRequest.Capabilities[0][0] == "gpu" {
+			caps := deviceRequest.Capabilities;
+			if deviceRequest.Driver == "nvidia" || (len(caps) > 0 && len(caps[0]) > 0 && caps[0][0] == "gpu") {
 				gpuOptions = &deviceRequest
 			}
 		}
